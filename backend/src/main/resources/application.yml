@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/evolve
+    username: user
+    password: 123
+
+  liquibase:
+    change-log: db/changelog/main-changelog.yml

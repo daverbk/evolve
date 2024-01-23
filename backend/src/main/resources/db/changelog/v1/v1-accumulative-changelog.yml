@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: v1-create-tables-changelog.mysql.sql
+      relativeToChangelogFile: true
