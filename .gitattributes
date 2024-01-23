@@ -1,1 +1,4 @@
 *.sql   linguist-detectable
+
+backend/** linguist-vendored=false
+frontend/** linguist-vendored=false
