@@ -1,0 +1,30 @@
+-- liquibase formatted sql
+
+-- changeset david.rabko:1706011068929-0
+CREATE DATABASE IF NOT EXISTS `evolve`;
+
+-- changeset david.rabko:1706011068929-0.1
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS `role`;
+DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `users_roles`;
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- changeset david.rabko:1706011068929-1
+CREATE TABLE `role` (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(50) NULL, CONSTRAINT PK_ROLE PRIMARY KEY (id));
+
+-- changeset david.rabko:1706011068929-2
+CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, username VARCHAR(50) NOT NULL, password CHAR(80) NOT NULL, enabled TINYINT(3) NOT NULL, CONSTRAINT PK_USER PRIMARY KEY (id));
+
+-- changeset david.rabko:1706011068929-3
+CREATE TABLE users_roles (user_id INT NOT NULL, role_id INT NOT NULL, CONSTRAINT PK_USERS_ROLES PRIMARY KEY (user_id, role_id));
+
+-- changeset david.rabko:1706011068929-4
+CREATE INDEX FK_ROLE_idx ON users_roles(role_id);
+
+-- changeset david.rabko:1706011068929-5
+ALTER TABLE users_roles ADD CONSTRAINT FK_ROLE FOREIGN KEY (role_id) REFERENCES `role` (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+-- changeset david.rabko:1706011068929-6
+ALTER TABLE users_roles ADD CONSTRAINT FK_USER_05 FOREIGN KEY (user_id) REFERENCES user (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
