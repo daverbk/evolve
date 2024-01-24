@@ -1,48 +1,34 @@
 package org.evolve.evolve.service;
 
-import org.evolve.evolve.dao.RoleDao;
-import org.evolve.evolve.dao.UserDao;
-import org.evolve.evolve.entity.Role;
 import org.evolve.evolve.entity.User;
+import org.evolve.evolve.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-
 @Service
 public class UserServiceImpl implements UserService {
 
-	private UserDao userDao;
+    private final UserRepository userRepository;
 
-	private RoleDao roleDao;
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
-	@Autowired
-	public UserServiceImpl(UserDao userDao, RoleDao roleDao) {
-		this.userDao = userDao;
-		this.roleDao = roleDao;
-	}
+    @Override
+    public User findByUserName(String userName) {
+        return userRepository.findByUsername(userName)
+                .orElseThrow(() -> new UsernameNotFoundException("User is not found"));
+    }
 
-	@Override
-	public User findByUserName(String userName) {
-		return userDao.findByUserName(userName);
-	}
-
-	@Override
-	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		User user = userDao.findByUserName(userName);
-		if (user == null) {
-			throw new UsernameNotFoundException("Invalid username or password.");
-		}
-		return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(),
-				mapRolesToAuthorities(user.getRoles()));
-	}
-
-	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
-		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
-	}
+    @Override
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        User user = findByUserName(userName);
+        return new User(user.getUsername(),
+                user.getPassword(),
+                user.isEnabled(),
+                user.getRole());
+    }
 }
