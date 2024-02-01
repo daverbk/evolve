@@ -4,6 +4,21 @@ spring:
     url: jdbc:mysql://localhost:3306/evolve
     username: user
     password: 123
-
   liquibase:
     change-log: db/changelog/main-changelog.yml
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+token:
+  signing:
+    key: 53A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855
+
+logging:
+  level:
+    org:
+      springframework:
+        security: debug
+        web: debug
+    web: debug
+
