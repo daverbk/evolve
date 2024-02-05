@@ -22,10 +22,10 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     /**
-     * Регистрация пользователя
+     * User sign up
      *
-     * @param request данные пользователя
-     * @return токен
+     * @param request user's data
+     * @return token
      */
     public JwtAuthenticationResponse signUp(SignUpRequest request) {
 
@@ -43,10 +43,10 @@ public class AuthenticationService {
     }
 
     /**
-     * Аутентификация пользователя
+     * User authentication
      *
-     * @param request данные пользователя
-     * @return токен
+     * @param request user's data
+     * @return token
      */
     public JwtAuthenticationResponse signIn(SignInRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -54,14 +54,9 @@ public class AuthenticationService {
                 request.getPassword()
         ));
 
-        log.error(request.getUsername());
-        log.error(request.getPassword());
-
         var user = userService
                 .userDetailsService()
                 .loadUserByUsername(request.getUsername());
-
-        log.error(String.valueOf(user));
 
         var jwt = jwtService.generateToken(user);
         return new JwtAuthenticationResponse(jwt);

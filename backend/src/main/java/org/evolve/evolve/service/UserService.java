@@ -16,27 +16,27 @@ public class UserService {
     private final UserRepository repository;
 
     /**
-     * Сохранение пользователя
+     * Save user
      *
-     * @return сохраненный пользователь
+     * @return saved user
      */
     public User save(User user) {
         return repository.save(user);
     }
 
     /**
-     * Создание пользователя
+     * Create user
      *
-     * @return созданный пользователь
+     * @return created user
      */
     public User create(User user) {
         if (repository.existsByUsername(user.getUsername())) {
-            // Заменить на свои исключения
-            throw new RuntimeException("Пользователь с таким именем уже существует");
+            // TODO: Add custom exceptions
+            throw new RuntimeException("User with this username already exists");
         }
 
         if (repository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Пользователь с таким email уже существует");
+            throw new RuntimeException("User with this email already exists");
         }
 
         return save(user);
@@ -56,9 +56,7 @@ public class UserService {
     }
 
     /**
-     * Получение пользователя по имени пользователя
-     * <p>
-     * Нужен для Spring Security
+     * Get user by username
      *
      * @return пользователь
      */
@@ -67,22 +65,18 @@ public class UserService {
     }
 
     /**
-     * Получение текущего пользователя
+     * Get current user
      *
-     * @return текущий пользователь
+     * @return current user
      */
     public User getCurrentUser() {
-        // Получение имени пользователя из контекста Spring Security
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
         return getByUsername(username);
     }
 
     /**
-     * Выдача прав администратора текущему пользователю
-     * <p>
-     * Нужен для демонстрации
+     * Give admin role to current user
      */
-    @Deprecated
     public void getAdmin() {
         var user = getCurrentUser();
         user.setRole(Role.ROLE_ADMIN);
