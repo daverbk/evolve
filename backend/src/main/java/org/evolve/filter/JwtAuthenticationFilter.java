@@ -1,4 +1,4 @@
-package org.evolve.evolve.filter;
+package org.evolve.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -7,8 +7,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.evolve.evolve.service.JwtService;
-import org.evolve.evolve.service.UserService;
+import org.evolve.service.JwtService;
+import org.evolve.service.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;

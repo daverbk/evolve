@@ -1,14 +1,14 @@
-package org.evolve.evolve.service;
+package org.evolve.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.evolve.evolve.dto.JwtAuthenticationResponse;
-import org.evolve.evolve.dto.SignInRequest;
-import org.evolve.evolve.dto.SignUpRequest;
-import org.evolve.evolve.entity.Role;
+import org.evolve.dto.JwtAuthenticationResponse;
+import org.evolve.dto.SignInRequest;
+import org.evolve.dto.SignUpRequest;
+import org.evolve.entity.Role;
+import org.evolve.entity.User;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.evolve.evolve.entity.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

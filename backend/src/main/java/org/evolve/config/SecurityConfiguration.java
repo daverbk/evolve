@@ -1,8 +1,8 @@
-package org.evolve.evolve.config;
+package org.evolve.config;
 
 import lombok.RequiredArgsConstructor;
-import org.evolve.evolve.filter.JwtAuthenticationFilter;
-import org.evolve.evolve.service.UserService;
+import org.evolve.filter.JwtAuthenticationFilter;
+import org.evolve.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

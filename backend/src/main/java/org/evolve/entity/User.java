@@ -1,4 +1,4 @@
-package org.evolve.evolve.entity;
+package org.evolve.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

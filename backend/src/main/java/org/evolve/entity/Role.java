@@ -1,4 +1,4 @@
-package org.evolve.evolve.entity;
+package org.evolve.entity;
 
 public enum Role {
     ROLE_USER,

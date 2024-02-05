@@ -1,9 +1,9 @@
-package org.evolve.evolve.service;
+package org.evolve.service;
 
 import lombok.RequiredArgsConstructor;
-import org.evolve.evolve.entity.Role;
-import org.evolve.evolve.entity.User;
-import org.evolve.evolve.repositories.UserRepository;
+import org.evolve.entity.Role;
+import org.evolve.entity.User;
+import org.evolve.repositories.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
