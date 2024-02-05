@@ -1,6 +1,6 @@
-package org.evolve.evolve.repositories;
+package org.evolve.repositories;
 
-import org.evolve.evolve.entity.User;
+import org.evolve.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

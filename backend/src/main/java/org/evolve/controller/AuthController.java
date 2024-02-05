@@ -1,13 +1,13 @@
-package org.evolve.evolve.controller;
+package org.evolve.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.evolve.evolve.dto.JwtAuthenticationResponse;
-import org.evolve.evolve.dto.SignInRequest;
-import org.evolve.evolve.dto.SignUpRequest;
-import org.evolve.evolve.service.AuthenticationService;
+import org.evolve.dto.JwtAuthenticationResponse;
+import org.evolve.dto.SignInRequest;
+import org.evolve.dto.SignUpRequest;
+import org.evolve.service.AuthenticationService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
