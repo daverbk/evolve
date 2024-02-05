@@ -12,25 +12,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/example")
 @RequiredArgsConstructor
-@Tag(name = "Аутентификация")
+@Tag(name = "Sign in")
 public class ExampleController {
     private final UserService service;
 
     @GetMapping
-    @Operation(summary = "Доступен только авторизованным пользователям")
+    @Operation(summary = "Can be accessed only by a signed in user")
     public String example() {
         return "Hello, world!";
     }
 
     @GetMapping("/admin")
-    @Operation(summary = "Доступен только авторизованным пользователям с ролью ADMIN")
+    @Operation(summary = "Can be accessed only by a signed in ADMIN user")
     @PreAuthorize("hasRole('ADMIN')")
     public String exampleAdmin() {
         return "Hello, admin!";
     }
 
     @GetMapping("/get-admin")
-    @Operation(summary = "Получить роль ADMIN (для демонстрации)")
+    @Operation(summary = "Get ADMIN role")
     public void getAdmin() {
         service.getAdmin();
     }

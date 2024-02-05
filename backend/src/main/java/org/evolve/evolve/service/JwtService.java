@@ -23,20 +23,20 @@ public class JwtService {
     private String jwtSigningKey;
 
     /**
-     * Извлечение имени пользователя из токена
+     * Extract username from a token
      *
-     * @param token токен
-     * @return имя пользователя
+     * @param token token
+     * @return username
      */
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
     /**
-     * Генерация токена
+     * Token generation
      *
-     * @param userDetails данные пользователя
-     * @return токен
+     * @param userDetails user data
+     * @return token
      */
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
@@ -49,11 +49,11 @@ public class JwtService {
     }
 
     /**
-     * Проверка токена на валидность
+     * Check if token is valid
      *
-     * @param token       токен
-     * @param userDetails данные пользователя
-     * @return true, если токен валиден
+     * @param token       token
+     * @param userDetails user data
+     * @return true, if token is valid
      */
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String userName = extractUserName(token);
@@ -61,11 +61,11 @@ public class JwtService {
     }
 
     /**
-     * Извлечение данных из токена
+     * Extract data from a token
      *
-     * @param token           токен
-     * @param claimsResolvers функция извлечения данных
-     * @param <T>             тип данных
+     * @param token           token
+     * @param claimsResolvers data extraction function
+     * @param <T>             data type
      * @return данные
      */
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
@@ -74,10 +74,10 @@ public class JwtService {
     }
 
     /**
-     * Генерация токена
+     * Token generation
      *
-     * @param extraClaims дополнительные данные
-     * @param userDetails данные пользователя
+     * @param extraClaims extra data
+     * @param userDetails user data
      * @return токен
      */
     private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
@@ -88,30 +88,30 @@ public class JwtService {
     }
 
     /**
-     * Проверка токена на просроченность
+     * Check if token has not expired
      *
-     * @param token токен
-     * @return true, если токен просрочен
+     * @param token token
+     * @return true, if token is expired
      */
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
     /**
-     * Извлечение даты истечения токена
+     * Extract expiration data from a token
      *
-     * @param token токен
-     * @return дата истечения
+     * @param token token
+     * @return expiration date
      */
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
     /**
-     * Извлечение всех данных из токена
+     * Extract all data from a token
      *
-     * @param token токен
-     * @return данные
+     * @param token token
+     * @return data
      */
     private Claims extractAllClaims(String token) {
         return Jwts.parser().setSigningKey(getSigningKey()).build().parseClaimsJws(token)
@@ -119,7 +119,7 @@ public class JwtService {
     }
 
     /**
-     * Получение ключа для подписи токена
+     * Get key for data for signing a token
      *
      * @return ключ
      */
