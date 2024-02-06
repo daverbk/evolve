@@ -34,11 +34,14 @@ public class User implements UserDetails {
     private String email;
 
     @Column(name = "enabled")
-    private boolean enabled = true;
+    private boolean enabled = false;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private Role role;
+
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
 
     public User(String username, String password, boolean enabled,
                 Role role) {

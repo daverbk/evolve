@@ -2,15 +2,19 @@ package org.evolve.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.connector.Response;
 import org.evolve.dto.JwtAuthenticationResponse;
 import org.evolve.dto.SignInRequest;
 import org.evolve.dto.SignUpRequest;
 import org.evolve.entity.Role;
 import org.evolve.entity.User;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Service
 @Slf4j
@@ -27,7 +31,7 @@ public class AuthenticationService {
      * @param request user's data
      * @return token
      */
-    public JwtAuthenticationResponse signUp(SignUpRequest request) {
+    public ResponseEntity<String> signUp(SignUpRequest request) {
 
         var user = User.builder()
                 .username(request.getUsername())
@@ -38,8 +42,9 @@ public class AuthenticationService {
 
         userService.create(user);
 
-        var jwt = jwtService.generateToken(user);
-        return new JwtAuthenticationResponse(jwt);
+        return new ResponseEntity<>("Please verify your email.", HttpStatus.OK);
+//        var jwt = jwtService.generateToken(user);
+//        return new JwtAuthenticationResponse(jwt);
     }
 
     /**
