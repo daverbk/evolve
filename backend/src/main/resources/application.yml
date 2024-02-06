@@ -5,10 +5,21 @@ spring:
     username: user
     password: 123
   liquibase:
-    change-log: db/changelog/main-changelog.yml
-  jpa:
-    hibernate:
-      ddl-auto: create
+    contexts: local
+    enabled: false
+  mail:
+    host: sandbox.smtp.mailtrap.io
+    port: 2525
+    username:
+    password:
+    properties:
+      mail:
+        smtp:
+          auth: PLAIN
+          starttls: Optional
+
+site:
+  url: "http://localhost:8080"
 
 token:
   signing:
