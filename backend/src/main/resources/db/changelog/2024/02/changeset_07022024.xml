@@ -1,0 +1,55 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="david.rabko (generated)" id="1707337180190-1">
+        <createTable tableName="role">
+            <column name="name" type="VARCHAR(30)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="david.rabko (generated)" id="1707337180190-2">
+        <createTable tableName="user">
+            <column name="enabled" type="BIT(1)"/>
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="role" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="verification_code" type="VARCHAR(64)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="david.rabko (generated)" id="1707337180190-3">
+        <loadData commentLineStartsWith="#" encoding="UTF-8" file="db/changelog/data/role.csv" quotchar="&quot;" separator="," tableName="role">
+            <column header="name" name="name" type="STRING"/>
+        </loadData>
+    </changeSet>
+    <changeSet author="david.rabko (generated)" id="1707337180190-4">
+        <loadData commentLineStartsWith="#" encoding="UTF-8" file="db/changelog/data/user.csv" quotchar="&quot;" separator="," tableName="user">
+            <column header="enabled" name="enabled" type="BOOLEAN"/>
+            <column header="id" name="id" type="NUMERIC"/>
+            <column header="email" name="email" type="STRING"/>
+            <column header="password" name="password" type="STRING"/>
+            <column header="username" name="username" type="STRING"/>
+            <column header="role" name="role" type="STRING"/>
+            <column header="verification_code" name="verification_code" type="skip"/>
+        </loadData>
+    </changeSet>
+    <changeSet author="david.rabko (generated)" id="1707337180190-5">
+        <createIndex associatedWith="" indexName="user_role__fk" tableName="user">
+            <column name="role"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="david.rabko (generated)" id="1707337180190-6">
+        <addForeignKeyConstraint baseColumnNames="role" baseTableName="user" constraintName="user_role__fk" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="name" referencedTableName="role" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,4 +1,0 @@
-databaseChangeLog:
-  - include:
-      file: v1-create-tables-and-roles-changelog.mysql.sql
-      relativeToChangelogFile: true
