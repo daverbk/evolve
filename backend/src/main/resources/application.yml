@@ -5,8 +5,8 @@ spring:
     username: user
     password: 123
   liquibase:
-    contexts: local
-    enabled: false
+    change-log: "db/changelog/main-changelog.xml"
+
   mail:
     host: sandbox.smtp.mailtrap.io
     port: 2525
@@ -17,9 +17,6 @@ spring:
         smtp:
           auth: PLAIN
           starttls: Optional
-
-site:
-  url: "http://localhost:8080"
 
 token:
   signing:
