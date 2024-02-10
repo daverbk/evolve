@@ -1,27 +1,34 @@
+app:
+  url: http://localhost:8080
+
 spring:
+
+  # DB Properties
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/evolve
-    username: user
-    password: 123
+    url: ${{ secrets.DB_URL }}
+    username: ${{ secrets.DB_USERNAME }}
+    password: ${{ secrets.DB_PASSWORD }}
   liquibase:
-    change-log: "db/changelog/main-changelog.xml"
+    change-log: db/changelog/main-changelog.xml
 
+  # Email Configuration
   mail:
-    host: sandbox.smtp.mailtrap.io
-    port: 2525
-    username:
-    password:
-    properties:
-      mail:
-        smtp:
-          auth: PLAIN
-          starttls: Optional
+    host: smtp.yandex.by
+    port: 465
+    username: e.volve@yandex.by
+    password: ${{ secrets.EMAIL_PASSWORD }}
+    protocol: smtps
 
+# Authentication
 token:
+  timeout:
+    access: 3600
+    refresh: 7200
   signing:
-    key: 53A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855
+    key: ${{ secrets.JWT_SIGNATURE_TOKEN }}
 
+# Logging
 logging:
   level:
     org:
@@ -30,3 +37,5 @@ logging:
         web: debug
     web: debug
 
+mail:
+  debug: true

@@ -43,14 +43,6 @@ public class User implements UserDetails {
     @Column(name = "verification_code", length = 64)
     private String verificationCode;
 
-    public User(String username, String password, boolean enabled,
-                Role role) {
-        this.username = username;
-        this.password = password;
-        this.enabled = enabled;
-        this.role = role;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

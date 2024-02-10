@@ -5,10 +5,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.evolve.dto.JwtAuthenticationResponse;
+import org.evolve.dto.RefreshTokenRequest;
 import org.evolve.dto.SignInRequest;
 import org.evolve.dto.SignUpRequest;
-import org.evolve.service.AuthenticationService;
+import org.evolve.service.auth.AuthenticationService;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,5 +31,21 @@ public class AuthController {
     @PostMapping("/sign-in")
     public JwtAuthenticationResponse signIn(@RequestBody @Valid SignInRequest request) {
         return authenticationService.signIn(request);
+    }
+
+    @Operation(summary = "Refresh access token")
+    @PostMapping("/refresh-token")
+    public JwtAuthenticationResponse refreshToken(@RequestBody @Valid RefreshTokenRequest request) {
+        return authenticationService.refreshToken(request);
+    }
+
+    @Operation(summary = "Email verification endpoint")
+    @GetMapping("/verify")
+    public ResponseEntity<String> verifyUser(@Param("code") String code) {
+        if (authenticationService.verify(code)) {
+            return new ResponseEntity<>("Your account is verified", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("ERROR", HttpStatus.BAD_REQUEST);
+        }
     }
 }
