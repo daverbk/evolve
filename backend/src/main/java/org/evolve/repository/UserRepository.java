@@ -1,4 +1,4 @@
-package org.evolve.repositories;
+package org.evolve.repository;
 
 import org.evolve.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

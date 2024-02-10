@@ -1,17 +1,18 @@
-package org.evolve.service;
+package org.evolve.service.auth;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.Getter;
 import org.evolve.entity.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,22 +23,14 @@ public class JwtService {
     @Value("${token.signing.key}")
     private String jwtSigningKey;
 
-    /**
-     * Extract username from a token
-     *
-     * @param token token
-     * @return username
-     */
+    @Getter
+    @Value("${token.timeout.access}")
+    private int expirationSeconds;
+
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    /**
-     * Token generation
-     *
-     * @param userDetails user data
-     * @return token
-     */
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         if (userDetails instanceof User customUserDetails) {
@@ -48,81 +41,41 @@ public class JwtService {
         return generateToken(claims, userDetails);
     }
 
-    /**
-     * Check if token is valid
-     *
-     * @param token       token
-     * @param userDetails user data
-     * @return true, if token is valid
-     */
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String userName = extractUserName(token);
         return (userName.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
-    /**
-     * Extract data from a token
-     *
-     * @param token           token
-     * @param claimsResolvers data extraction function
-     * @param <T>             data type
-     * @return данные
-     */
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
         final Claims claims = extractAllClaims(token);
         return claimsResolvers.apply(claims);
     }
 
-    /**
-     * Token generation
-     *
-     * @param extraClaims extra data
-     * @param userDetails user data
-     * @return токен
-     */
     private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return Jwts.builder().setClaims(extraClaims).setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + Duration.ofHours(2).toMillis()))
+        return Jwts.builder()
+                .setClaims(extraClaims)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(Date.from(Instant.now()))
+                .setExpiration(Date.from(Instant.now().plusSeconds(expirationSeconds)))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256).compact();
     }
 
-    /**
-     * Check if token has not expired
-     *
-     * @param token token
-     * @return true, if token is expired
-     */
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    /**
-     * Extract expiration data from a token
-     *
-     * @param token token
-     * @return expiration date
-     */
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    /**
-     * Extract all data from a token
-     *
-     * @param token token
-     * @return data
-     */
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(getSigningKey()).build().parseClaimsJws(token)
+        return Jwts.parser()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
                 .getBody();
     }
 
-    /**
-     * Get key for data for signing a token
-     *
-     * @return ключ
-     */
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSigningKey);
         return Keys.hmacShaKeyFor(keyBytes);

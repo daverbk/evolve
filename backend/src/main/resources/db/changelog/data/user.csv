@@ -1,2 +1,2 @@
 "enabled","id","email","password","username","role","verification_code"
-"true","1","admin@email.com","12345678","Admin","ROLE_ADMIN","NULL"
+"true","1","admin@email.com","$2y$10$/HQSt85FtPWhoj0UEp.YSuj5nFx/N7GVW8.rb3xxijP0aBPvt3Pmm","Admin","ROLE_ADMIN","NULL"

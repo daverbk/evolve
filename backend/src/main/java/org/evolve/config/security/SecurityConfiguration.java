@@ -1,4 +1,4 @@
-package org.evolve.config;
+package org.evolve.config.security;
 
 import lombok.RequiredArgsConstructor;
 import org.evolve.filter.JwtAuthenticationFilter;
@@ -42,15 +42,15 @@ public class SecurityConfiguration {
                     corsConfiguration.setAllowCredentials(true);
                     return corsConfiguration;
                 }))
-
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/auth/**", "/verify").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/endpoint", "/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 
