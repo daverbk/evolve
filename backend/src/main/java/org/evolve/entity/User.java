@@ -1,7 +1,8 @@
-package org.evolve.evolve.entity;
+package org.evolve.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,12 +15,13 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class User implements UserDetails {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "username", unique = true, nullable = false)
@@ -32,19 +34,14 @@ public class User implements UserDetails {
     private String email;
 
     @Column(name = "enabled")
-    private boolean enabled = true;
+    private boolean enabled = false;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private Role role;
 
-    public User(String username, String password, boolean enabled,
-                Role role) {
-        this.username = username;
-        this.password = password;
-        this.enabled = enabled;
-        this.role = role;
-    }
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -53,16 +50,16 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 }

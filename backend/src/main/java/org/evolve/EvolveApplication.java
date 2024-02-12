@@ -1,4 +1,4 @@
-package org.evolve.evolve;
+package org.evolve;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
