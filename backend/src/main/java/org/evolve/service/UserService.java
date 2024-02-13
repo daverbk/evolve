@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import org.evolve.entity.User;
 import org.evolve.exception.auth.UserAlreadyExistsException;
 import org.evolve.repository.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,11 @@ public class UserService {
     public User getByUsername(String userName) {
         return repository.findByUsername(userName)
                 .orElseThrow(() -> new UsernameNotFoundException("User is not found"));
+    }
+
+    public Long extractUserIdFromSecurityContext() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return user.getId();
     }
 
     @Transactional
