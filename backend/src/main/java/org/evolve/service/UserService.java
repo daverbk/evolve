@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.evolve.entity.User;
 import org.evolve.exception.auth.UserAlreadyExistsException;
 import org.evolve.repository.UserRepository;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,11 +30,6 @@ public class UserService {
     }
 
     @Transactional
-    public void save(User user) {
-        repository.save(user);
-    }
-
-    @Transactional
     public void create(User user) {
         if (repository.existsByUsername(user.getUsername())) {
             throw new UserAlreadyExistsException(user.getUsername(), "User with this username already exists");
@@ -46,6 +40,11 @@ public class UserService {
         }
 
         save(user);
+    }
+
+    @Transactional
+    public void save(User user) {
+        repository.save(user);
     }
 
     @Transactional
