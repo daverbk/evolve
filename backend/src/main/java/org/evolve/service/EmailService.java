@@ -33,13 +33,14 @@ public class EmailService {
     public void sendVerificationEmail(User user)
             throws MessagingException, IOException {
 
-        String verificationLink = AppConstants.APP_URL + "/auth/verify?code=" + user.getVerificationCode();
-        String content = loadEmailTemplate(user.getUsername(), verificationLink);
+        String verificationLink =
+                AppConstants.APP_URL + "/auth/verify?code=" + user.getVerificationCode();
 
+        String content = loadEmailTemplate(user.getUsername(), verificationLink);
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        helper.setFrom("e.volve@yandex.by");
+        helper.setFrom(AppConstants.EVOLVE_MAILBOX);
         helper.setTo(user.getEmail());
         helper.setSubject("Evolve: Email verification");
         helper.setText(content, true);
@@ -49,13 +50,13 @@ public class EmailService {
     private String loadEmailTemplate(String username, String verificationLink)
             throws IOException {
 
-        Resource resource = resourceLoader
-                .getResource("classpath:/templates/email_verification.html");
-        String template = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
+        Resource resource =
+                resourceLoader.getResource("classpath:/templates/email_verification.html");
 
+        String template = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
         template = template
                 .replace("[USERNAME]", username)
-                .replace("[VERIFICATION_CODE]", verificationLink);
+                .replace("[VERIFICATION_LINK]", verificationLink);
 
         return template;
     }

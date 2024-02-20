@@ -25,6 +25,9 @@ public class EmailConfiguration {
     @Value("${spring.mail.protocol}")
     private String protocol;
 
+    @Value("${spring.mail.properties.mail.smtp.ssl.enable}")
+    private String enableSsl;
+
     @Value("${mail.debug}")
     private String debug;
 
@@ -40,6 +43,7 @@ public class EmailConfiguration {
         Properties properties = mailSender.getJavaMailProperties();
 
         properties.setProperty("mail.transport.protocol", protocol);
+        properties.setProperty("mail.smtp.ssl.enable", enableSsl);
         properties.setProperty("mail.debug", debug);
 
         return mailSender;
