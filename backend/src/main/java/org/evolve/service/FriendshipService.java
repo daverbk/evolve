@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.evolve.entity.Friendship;
 import org.evolve.entity.FriendshipStatus;
 import org.evolve.repository.FriendshipRepository;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,9 +17,9 @@ public class FriendshipService {
     private final FriendshipRepository friendshipRepository;
     private final UserService userService;
 
-    // TODO: Add to controller
     public List<Long> getFriends() {
         Long userId = userService.extractUserIdFromSecurityContext();
+
         return friendshipRepository.findFriends(userId).stream()
                 .flatMap(friendship -> Stream.of(friendship.getUserId(), friendship.getFriendId()))
                 .filter(id -> !id.equals(userId))
@@ -32,14 +33,8 @@ public class FriendshipService {
 
         Friendship friendship = friendshipRepository
                 .findByUserFriendIds(userId, potentialFriendId)
-                .orElse(Friendship.builder()
-                        .userId(potentialFriendId)
-                        .friendId(userId)
-                        .status(FriendshipStatus.PENDING)
-                        .build()
-                );
+                .orElseThrow(() -> new UsernameNotFoundException("Potential friend for invite is not found by id"));
 
-        // TODO: Add check on the friendship existence?
         friendshipRepository.save(friendship);
 
         return friendship;
@@ -51,10 +46,8 @@ public class FriendshipService {
 
         Friendship friendship = friendshipRepository
                 .findByUserFriendIds(userId, potentialFriendId)
-                // TODO: Custom?
-                .orElseThrow();
+                .orElseThrow(() -> new UsernameNotFoundException("Friend for friendship accept is not found by id"));
 
-        // TODO: Add check on the friendship existence?
         friendship.setStatus(FriendshipStatus.ACCEPTED);
         friendshipRepository.save(friendship);
 
@@ -67,10 +60,8 @@ public class FriendshipService {
 
         Friendship friendship = friendshipRepository
                 .findByUserFriendIds(userId, potentialFriendId)
-                // TODO: Custom?
-                .orElseThrow();
+                .orElseThrow(() -> new UsernameNotFoundException("Friend for friendship decline is not found by id"));
 
-        // TODO: Add check on the friendship existence?
         friendship.setStatus(FriendshipStatus.DECLINED);
         friendshipRepository.save(friendship);
 
@@ -78,21 +69,13 @@ public class FriendshipService {
     }
 
     @Transactional
-    public Friendship withdrawInvite(Long potentialFriendId) {
+    public void withdrawInvite(Long potentialFriendId) {
         Long userId = userService.extractUserIdFromSecurityContext();
 
         Friendship friendship = friendshipRepository
                 .findByUserFriendIds(userId, potentialFriendId)
-                .orElse(Friendship.builder()
-                        .userId(userId)
-                        .friendId(potentialFriendId)
-                        .status(FriendshipStatus.PENDING)
-                        .build()
-                );
+                .orElseThrow(() -> new UsernameNotFoundException("Friend for friendship withdrawal is not found by id"));
 
-        // TODO: Add check on the friendship existence?
-        friendshipRepository.save(friendship);
-
-        return friendship;
+        friendshipRepository.delete(friendship);
     }
 }

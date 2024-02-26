@@ -11,17 +11,15 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/friendships")
+@RequestMapping("/friendships/")
 public class FriendshipController {
     private final FriendshipService friendshipService;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<Long>> getFriendships() {
         return new ResponseEntity<>(friendshipService.getFriends(), HttpStatus.OK);
     }
 
-
-    // TODO: Check string val
     @PostMapping("/invite/{id}")
     public ResponseEntity<Friendship> invite(@PathVariable String id) {
         return new ResponseEntity<>(friendshipService.invite(Long.parseLong(id)), HttpStatus.OK);
@@ -38,7 +36,8 @@ public class FriendshipController {
     }
 
     @PostMapping("/withdraw/{id}")
-    public ResponseEntity<Friendship> withdrawInvite(@PathVariable String id) {
-        return new ResponseEntity<>(friendshipService.withdrawInvite(Long.parseLong(id)), HttpStatus.OK);
+    public ResponseEntity<?> withdrawInvite(@PathVariable String id) {
+        friendshipService.withdrawInvite(Long.parseLong(id));
+        return ResponseEntity.ok().build();
     }
 }
