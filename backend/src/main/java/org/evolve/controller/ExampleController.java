@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Tag(name = "Sign in")
 public class ExampleController {
-    @GetMapping
-    @Operation(summary = "Can be accessed only by a signed in user")
-    public String example() {
-        return "Hello, world!";
-    }
+  @GetMapping
+  @Operation(summary = "Can be accessed only by a signed in user")
+  public String example() {
+    return "Hello, world!";
+  }
 
-    @GetMapping("/admin")
-    @Operation(summary = "Can be accessed only by a signed in ADMIN user")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String exampleAdmin() {
-        return "Hello, admin!";
-    }
+  @GetMapping("/admin")
+  @Operation(summary = "Can be accessed only by a signed in ADMIN user")
+  @PreAuthorize("hasRole('ADMIN')")
+  public String exampleAdmin() {
+    return "Hello, admin!";
+  }
 }

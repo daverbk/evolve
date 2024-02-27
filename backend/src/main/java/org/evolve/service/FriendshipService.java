@@ -14,68 +14,68 @@ import java.util.stream.Stream;
 @Service
 @RequiredArgsConstructor
 public class FriendshipService {
-    private final FriendshipRepository friendshipRepository;
-    private final UserService userService;
+  private final FriendshipRepository friendshipRepository;
+  private final UserService userService;
 
-    public List<Long> getFriends() {
-        Long userId = userService.extractUserIdFromSecurityContext();
+  public List<Long> getFriends() {
+    Long userId = userService.extractUserIdFromSecurityContext();
 
-        return friendshipRepository.findFriends(userId).stream()
-                .flatMap(friendship -> Stream.of(friendship.getUserId(), friendship.getFriendId()))
-                .filter(id -> !id.equals(userId))
-                .distinct()
-                .toList();
-    }
+    return friendshipRepository.findFriends(userId).stream()
+      .flatMap(friendship -> Stream.of(friendship.getUserId(), friendship.getFriendId()))
+      .filter(id -> !id.equals(userId))
+      .distinct()
+      .toList();
+  }
 
-    @Transactional
-    public Friendship invite(Long potentialFriendId) {
-        Long userId = userService.extractUserIdFromSecurityContext();
+  @Transactional
+  public Friendship invite(Long potentialFriendId) {
+    Long userId = userService.extractUserIdFromSecurityContext();
 
-        Friendship friendship = friendshipRepository
-                .findByUserFriendIds(userId, potentialFriendId)
-                .orElseThrow(() -> new UsernameNotFoundException("Potential friend for invite is not found by id"));
+    Friendship friendship = friendshipRepository
+      .findByUserFriendIds(userId, potentialFriendId)
+      .orElseThrow(() -> new UsernameNotFoundException("Potential friend for invite is not found by id"));
 
-        friendshipRepository.save(friendship);
+    friendshipRepository.save(friendship);
 
-        return friendship;
-    }
+    return friendship;
+  }
 
-    @Transactional
-    public Friendship accept(Long potentialFriendId) {
-        Long userId = userService.extractUserIdFromSecurityContext();
+  @Transactional
+  public Friendship accept(Long potentialFriendId) {
+    Long userId = userService.extractUserIdFromSecurityContext();
 
-        Friendship friendship = friendshipRepository
-                .findByUserFriendIds(userId, potentialFriendId)
-                .orElseThrow(() -> new UsernameNotFoundException("Friend for friendship accept is not found by id"));
+    Friendship friendship = friendshipRepository
+      .findByUserFriendIds(userId, potentialFriendId)
+      .orElseThrow(() -> new UsernameNotFoundException("Friend for friendship accept is not found by id"));
 
-        friendship.setStatus(FriendshipStatus.ACCEPTED);
-        friendshipRepository.save(friendship);
+    friendship.setStatus(FriendshipStatus.ACCEPTED);
+    friendshipRepository.save(friendship);
 
-        return friendship;
-    }
+    return friendship;
+  }
 
-    @Transactional
-    public Friendship decline(Long potentialFriendId) {
-        Long userId = userService.extractUserIdFromSecurityContext();
+  @Transactional
+  public Friendship decline(Long potentialFriendId) {
+    Long userId = userService.extractUserIdFromSecurityContext();
 
-        Friendship friendship = friendshipRepository
-                .findByUserFriendIds(userId, potentialFriendId)
-                .orElseThrow(() -> new UsernameNotFoundException("Friend for friendship decline is not found by id"));
+    Friendship friendship = friendshipRepository
+      .findByUserFriendIds(userId, potentialFriendId)
+      .orElseThrow(() -> new UsernameNotFoundException("Friend for friendship decline is not found by id"));
 
-        friendship.setStatus(FriendshipStatus.DECLINED);
-        friendshipRepository.save(friendship);
+    friendship.setStatus(FriendshipStatus.DECLINED);
+    friendshipRepository.save(friendship);
 
-        return friendship;
-    }
+    return friendship;
+  }
 
-    @Transactional
-    public void withdrawInvite(Long potentialFriendId) {
-        Long userId = userService.extractUserIdFromSecurityContext();
+  @Transactional
+  public void withdrawInvite(Long potentialFriendId) {
+    Long userId = userService.extractUserIdFromSecurityContext();
 
-        Friendship friendship = friendshipRepository
-                .findByUserFriendIds(userId, potentialFriendId)
-                .orElseThrow(() -> new UsernameNotFoundException("Friend for friendship withdrawal is not found by id"));
+    Friendship friendship = friendshipRepository
+      .findByUserFriendIds(userId, potentialFriendId)
+      .orElseThrow(() -> new UsernameNotFoundException("Friend for friendship withdrawal is not found by id"));
 
-        friendshipRepository.delete(friendship);
-    }
+    friendshipRepository.delete(friendship);
+  }
 }
