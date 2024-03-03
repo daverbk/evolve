@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Evolve Discussions
+    url: https://github.com/daverbk/evolve/discussions
+    about: Please ask and answer questions here
+  - name: Security Vulnerabilities
+    url: https://github.com/daverbk/evolve/blob/dev/.github/SECURITY.md
+    about: Please report security vulnerabilities here
