@@ -37,32 +37,17 @@ jobs:
     - name: Autobuild
       uses: github/codeql-action/autobuild@v3
 
-    - name: Perform CodeQL Analysis
-      id: javascript-analysis
+    - name: Perform CodeQL Analysis and Upload SARIF
+      id: codeql-analysis
       uses: github/codeql-action/analyze@v3
       with:
-        queries: languages/javascript/pointers
-        paths: "frontend"
-        if: matrix.language == 'javascript-typescript'
-
-    - name: Perform CodeQL Analysis
-      id: java-kotlin-analysis
-      uses: github/codeql-action/analyze@v3
-      with:
-        queries: languages/java/pointers
-        paths: "backend"
-        if: matrix.language == 'java-kotlin'
-
-    - name: Upload JavaScript/TypeScript Analysis Results
-      uses: github/codeql-action/upload-sarif@v3
-      with:
-        sarif_file: ${{ steps.javascript-analysis.outputs.sarif_file }}
-        category: "javascript-analysis"
-      if: matrix.language == 'javascript-typescript'
-
-    - name: Upload Java/Kotlin Analysis Results
-      uses: github/codeql-action/upload-sarif@v3
-      with:
-        sarif_file: ${{ steps.java-kotlin-analysis.outputs.sarif_file }}
-        category: "java-kotlin-analysis"
-      if: matrix.language == 'java-kotlin'
+        queries: |
+          languages/javascript/pointers
+          languages/java/pointers
+        paths: |
+          frontend
+          backend
+        # Pass the category based on the language being analyzed
+        additionalArguments: |
+          -D codeql.query.frontend=${{ matrix.language == 'javascript-typescript' }}
+          -D codeql.query.backend=${{ matrix.language == 'java-kotlin' }}
