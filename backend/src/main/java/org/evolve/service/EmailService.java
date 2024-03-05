@@ -56,7 +56,7 @@ public class EmailService {
     String template = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
     template = template
       .replace("[USERNAME]", username)
-      .replace("[VERIFICATION_LINK]", verificationLink);
+      .replaceAll("\\[VERIFICATION_LINK]", verificationLink);
 
     return template;
   }
