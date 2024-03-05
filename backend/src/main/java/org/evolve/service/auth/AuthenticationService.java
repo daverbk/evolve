@@ -2,10 +2,10 @@ package org.evolve.service.auth;
 
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import org.evolve.dto.JwtAuthenticationResponse;
-import org.evolve.dto.RefreshTokenRequest;
-import org.evolve.dto.SignInRequest;
-import org.evolve.dto.SignUpRequest;
+import org.evolve.dto.response.JwtAuthenticationResponse;
+import org.evolve.dto.request.RefreshTokenRequest;
+import org.evolve.dto.request.SignInRequest;
+import org.evolve.dto.request.SignUpRequest;
 import org.evolve.entity.RefreshToken;
 import org.evolve.entity.Role;
 import org.evolve.entity.User;
@@ -36,7 +36,6 @@ public class AuthenticationService {
   private final AuthenticationManager authenticationManager;
 
   public ResponseEntity<String> signUp(SignUpRequest request) {
-
     User user = User.builder()
       .username(request.getUsername())
       .email(request.getEmail())
