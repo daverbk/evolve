@@ -1,4 +1,4 @@
-package org.evolve.dto;
+package org.evolve.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
