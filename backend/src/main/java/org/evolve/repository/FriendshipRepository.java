@@ -11,6 +11,6 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Integer>
   @Query("SELECT f FROM Friendship f WHERE f.userId = ?1 AND f.friendId = ?2")
   Optional<Friendship> findByUserFriendIds(Long userId, Long friendId);
 
-  @Query("SELECT f FROM Friendship f WHERE f.userId = ?1 OR f.friendId =?1 AND f.status = 'ACCEPTED'")
+  @Query("SELECT f FROM Friendship f WHERE f.userId = ?1 OR f.friendId =?1 AND f.status = org.evolve.entity.FriendshipStatus.ACCEPTED")
   List<Friendship> findFriends(Long userId);
 }
