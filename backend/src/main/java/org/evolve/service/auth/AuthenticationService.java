@@ -2,10 +2,10 @@ package org.evolve.service.auth;
 
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import org.evolve.dto.JwtAuthenticationResponse;
-import org.evolve.dto.RefreshTokenRequest;
-import org.evolve.dto.SignInRequest;
-import org.evolve.dto.SignUpRequest;
+import org.evolve.dto.response.JwtAuthenticationResponse;
+import org.evolve.dto.request.RefreshTokenRequest;
+import org.evolve.dto.request.SignInRequest;
+import org.evolve.dto.request.SignUpRequest;
 import org.evolve.entity.RefreshToken;
 import org.evolve.entity.Role;
 import org.evolve.entity.User;
@@ -28,75 +28,74 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final UserService userService;
-    private final JwtService jwtService;
-    private final RefreshTokenService refreshTokenService;
-    private final EmailService emailService;
-    private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
+  private final UserService userService;
+  private final JwtService jwtService;
+  private final RefreshTokenService refreshTokenService;
+  private final EmailService emailService;
+  private final PasswordEncoder passwordEncoder;
+  private final AuthenticationManager authenticationManager;
 
-    public ResponseEntity<String> signUp(SignUpRequest request) {
+  public ResponseEntity<String> signUp(SignUpRequest request) {
+    User user = User.builder()
+      .username(request.getUsername())
+      .email(request.getEmail())
+      .password(passwordEncoder.encode(request.getPassword()))
+      .role(Role.ROLE_USER)
+      .enabled(false)
+      .verificationCode(UUID.randomUUID().toString())
+      .build();
 
-        User user = User.builder()
-                .username(request.getUsername())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.ROLE_USER)
-                .enabled(false)
-                .verificationCode(UUID.randomUUID().toString())
-                .build();
-
-        try {
-            emailService.sendVerificationEmail(user);
-        } catch (MessagingException | IOException e) {
-            return new ResponseEntity<>(
-                    "We ran into an issue, try again please.",
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
-        }
-
-        userService.create(user);
-        return new ResponseEntity<>(
-                "Email verification link has been sent to your email.",
-                HttpStatus.OK);
+    try {
+      emailService.sendVerificationEmail(user);
+    } catch (MessagingException | IOException e) {
+      return new ResponseEntity<>(
+        "We ran into an issue, try again please.",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
 
-    public JwtAuthenticationResponse signIn(SignInRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                    request.getUsername(),
-                    request.getPassword()
-        ));
+    userService.create(user);
+    return new ResponseEntity<>(
+      "Email verification link has been sent to your email.",
+      HttpStatus.OK);
+  }
 
-        UserDetails user = userService
-                .userDetailsService()
-                .loadUserByUsername(request.getUsername());
+  public JwtAuthenticationResponse signIn(SignInRequest request) {
+    authenticationManager.authenticate(
+      new UsernamePasswordAuthenticationToken(
+        request.getUsername(),
+        request.getPassword()
+      ));
 
-        String jwt = jwtService.generateToken(user);
-        RefreshToken refreshToken = refreshTokenService.generateToken(user);
+    UserDetails user = userService
+      .userDetailsService()
+      .loadUserByUsername(request.getUsername());
 
-        return new JwtAuthenticationResponse(
-                jwt,
-                refreshToken.getToken(),
-                jwtService.getExpirationSeconds(),
-                refreshTokenService.getExpirationSeconds());
-    }
+    String jwt = jwtService.generateToken(user);
+    RefreshToken refreshToken = refreshTokenService.generateToken(user);
 
-    public JwtAuthenticationResponse refreshToken(RefreshTokenRequest request) {
-        String requestRefreshToken = request.getRefreshToken();
-        RefreshToken refreshToken = refreshTokenService.getByToken(requestRefreshToken)
-                .orElseThrow(() -> new NoSuchElementException("Refresh token is not found."));
-        refreshTokenService.verifyExpiration(refreshToken);
+    return new JwtAuthenticationResponse(
+      jwt,
+      refreshToken.getToken(),
+      jwtService.getExpirationSeconds(),
+      refreshTokenService.getExpirationSeconds());
+  }
 
-        return new JwtAuthenticationResponse(
-                jwtService.generateToken(refreshToken.getUser()),
-                requestRefreshToken,
-                jwtService.getExpirationSeconds(),
-                Duration.between(Instant.now(), refreshToken.getExpirationDate()).getSeconds()
-        );
-    }
+  public JwtAuthenticationResponse refreshToken(RefreshTokenRequest request) {
+    String requestRefreshToken = request.getRefreshToken();
+    RefreshToken refreshToken = refreshTokenService.getByToken(requestRefreshToken)
+      .orElseThrow(() -> new NoSuchElementException("Refresh token is not found."));
+    refreshTokenService.verifyExpiration(refreshToken);
 
-    public boolean verify(String verificationCode) {
-        return userService.verify(verificationCode);
-    }
+    return new JwtAuthenticationResponse(
+      jwtService.generateToken(refreshToken.getUser()),
+      requestRefreshToken,
+      jwtService.getExpirationSeconds(),
+      Duration.between(Instant.now(), refreshToken.getExpirationDate()).getSeconds()
+    );
+  }
+
+  public boolean verify(String verificationCode) {
+    return userService.verify(verificationCode);
+  }
 }
