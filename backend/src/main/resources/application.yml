@@ -16,9 +16,15 @@ spring:
   mail:
     host: smtp.yandex.by
     port: 465
-    username: e.volve@yandex.by
+    username: evolve.socialnetwork@yandex.by
     password: ${{ secrets.EMAIL_PASSWORD }}
-    protocol: smtps
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+
 
 # Authentication
 token:

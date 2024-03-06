@@ -1,4 +1,4 @@
-package org.evolve.evolve;
+package org.evolve;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
