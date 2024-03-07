@@ -176,6 +176,9 @@ liquibase.properties
 # App config
 application.yml
 
+# App secrets
+application.secrets.yml
+
 # React
 # dependencies
 /node_modules
