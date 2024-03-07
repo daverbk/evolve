@@ -173,6 +173,9 @@ msbuild.wrn
 # Liquibase config
 liquibase.properties
 
+# App config
+application.yml
+
 # React
 # dependencies
 /node_modules
