@@ -3,12 +3,15 @@ app:
 
 spring:
 
+  config:
+    import: classpath:application.secrets.yml
+
   # DB Properties
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${{ secrets.DB_URL }}
-    username: ${{ secrets.DB_USERNAME }}
-    password: ${{ secrets.DB_PASSWORD }}
+    url: ${database.url}
+    username: ${database.username}
+    password: ${database.password}
   liquibase:
     change-log: db/changelog/main-changelog.xml
 
@@ -17,7 +20,7 @@ spring:
     host: smtp.yandex.by
     port: 465
     username: evolve.socialnetwork@yandex.by
-    password: ${{ secrets.EMAIL_PASSWORD }}
+    password: ${mail.password}
     protocol: smtp
     properties:
       mail:
@@ -32,7 +35,7 @@ token:
     access: 3600
     refresh: 7200
   signing:
-    key: ${{ secrets.JWT_SIGNATURE_TOKEN }}
+    key: ${jwt.signature}
 
 # Logging
 logging:
