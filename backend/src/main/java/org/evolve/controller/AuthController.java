@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Sign in")
 public class AuthController {
   private final AuthenticationService authenticationService;
-
   @Operation(summary = "Sign up")
   @PostMapping("/sign-up")
   public ResponseEntity<String> signUp(@RequestBody @Valid SignUpRequest request) {
