@@ -28,11 +28,11 @@ public class JwtAuthenticationResponse {
   @Schema(description = "Refresh token expiration in seconds", example = "7200")
   private long refreshExpiresIn;
 
-  public JwtAuthenticationResponse(String access_token, String refresh_token,
-                                   long expires_in, long ext_expires_in) {
-    this.accessToken = access_token;
-    this.refreshToken = refresh_token;
-    this.expiresIn = expires_in;
-    this.refreshExpiresIn = ext_expires_in;
+  public JwtAuthenticationResponse(String accessToken, String refreshToken,
+                                   long expiresIn, long extExpiresIn) {
+    this.accessToken = accessToken;
+    this.refreshToken = refreshToken;
+    this.expiresIn = expiresIn;
+    this.refreshExpiresIn = extExpiresIn;
   }
 }
