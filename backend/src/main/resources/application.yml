@@ -9,9 +9,6 @@ spring:
   # DB Properties
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${database.url}
-    username: ${database.username}
-    password: ${database.password}
   liquibase:
     change-log: db/changelog/main-changelog.xml
 
@@ -28,6 +25,12 @@ spring:
           ssl:
             enable: true
 
+  # Docker Configuration
+  docker:
+    compose:
+      file: compose.yaml
+      skip:
+        in-tests: false
 
 # Authentication
 token:
