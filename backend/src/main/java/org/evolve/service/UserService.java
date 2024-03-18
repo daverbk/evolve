@@ -49,7 +49,9 @@ public class UserService {
 
   @Transactional
   public boolean verify(String verificationCode) {
-    User user = repository.findByVerificationCode(verificationCode).orElseThrow();
+    User user = repository.findByVerificationCode(verificationCode)
+      .orElseThrow(() -> new UsernameNotFoundException(
+        "User with this verification code is not found"));
 
     if (user.isEnabled()) {
       return false;
