@@ -8,18 +8,29 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: maven
-    
-    - name: Build with Maven
-      working-directory: ./backend
-      run: mvn -B package --file pom.xml
+
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Update application.yml
+        uses: fjogeleit/yaml-update-action@main
+        with:
+          changes: |
+            {
+              "backend/src/main/resources/application.yml": {
+                "spring.config.import": "classpath:application.yml",
+                "spring.main.password": "dummy",
+                "token.signing.key": "dummy"
+              }
+            }
+
+      - name: Build with Maven
+        working-directory: ./backend
+        run: mvn -B package --file pom.xml
