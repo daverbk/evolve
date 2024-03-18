@@ -82,7 +82,7 @@ hs_err_pid*
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff:
-.idea/
+.idea/*
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/dictionaries
@@ -102,6 +102,9 @@ hs_err_pid*
 
 # Mongo Explorer plugin:
 .idea/**/mongoSettings.xml
+
+# IntelliJ icon
+!.idea/icon.svg
 
 ## File-based project format:
 *.iws
@@ -137,7 +140,6 @@ buildNumber.properties
 !/.mvn/wrapper/maven-wrapper.jar
 
 # C#
-*.swp
 *.*~
 project.lock.json
 .DS_Store
@@ -173,9 +175,6 @@ msbuild.wrn
 # Liquibase config
 liquibase.properties
 
-# App config
-application.yml
-
 # App secrets
 application.secrets.yml
 
@@ -192,7 +191,6 @@ application.secrets.yml
 /build
 
 # misc
-.DS_Store
 .env.local
 .env.development.local
 .env.test.local
