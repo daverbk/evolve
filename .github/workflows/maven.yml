@@ -35,6 +35,9 @@ jobs:
               }
             }
 
+      - name: Print application.yml
+        run: cat ./backend/src/main/resources/application.yml
+
       - name: Build with Maven
         working-directory: ./backend
         run: mvn -B package --file pom.xml
