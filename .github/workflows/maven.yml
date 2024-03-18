@@ -23,14 +23,13 @@ jobs:
         uses: fjogeleit/yaml-update-action@main
         with:
           workDir: ./backend
-          updateFile: true
           commitChange: false
           createPR: false
           changes: |
             {
-              "./src/main/resources/application.yml": {
+              "/src/main/resources/application.yml": {
                 "spring.config.import": "classpath:application.yml",
-                "spring.main.password": "dummy",
+                "spring.mail.password": "dummy",
                 "token.signing.key": "dummy"
               }
             }
