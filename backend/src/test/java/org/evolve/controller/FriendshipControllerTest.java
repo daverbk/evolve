@@ -2,7 +2,7 @@ package org.evolve.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.datafaker.Faker;
-import org.evolve.config.EvolveTestConfiguration;
+import org.evolve.config.FakerConfiguration;
 import org.evolve.entity.Friendship;
 import org.evolve.entity.FriendshipStatus;
 import org.evolve.service.FriendshipService;
@@ -25,8 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Import(EvolveTestConfiguration.class)
-public class FriendshipControllerTest {
+@Import(FakerConfiguration.class)
+class FriendshipControllerTest {
   @MockBean
   private FriendshipService friendshipService;
 

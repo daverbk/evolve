@@ -5,6 +5,6 @@ services:
       - 'MYSQL_DATABASE=evolve'
       - 'MYSQL_ROOT_PASSWORD=verysecret'
       - 'MYSQL_USER=user'
-      - 'MYSQL_PASSWORD=123'
+      - 'MYSQL_PASSWORD=secret'
     ports:
       - '3306'

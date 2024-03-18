@@ -2,7 +2,7 @@ package org.evolve.service.auth;
 
 import jakarta.mail.MessagingException;
 import net.datafaker.Faker;
-import org.evolve.config.EvolveTestConfiguration;
+import org.evolve.config.FakerConfiguration;
 import org.evolve.dto.request.RefreshTokenRequest;
 import org.evolve.dto.request.SignInRequest;
 import org.evolve.dto.request.SignUpRequest;
@@ -12,19 +12,19 @@ import org.evolve.entity.Role;
 import org.evolve.entity.User;
 import org.evolve.service.EmailService;
 import org.evolve.service.UserService;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.TestPropertySource;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -39,11 +39,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-@AutoConfigureMockMvc
-@Import(EvolveTestConfiguration.class)
-@TestPropertySource(properties = {"token.timeout.access=3600", "token.timeout.refresh=7200"})
-public class AuthenticationServiceTest {
+@Import(FakerConfiguration.class)
+class AuthenticationServiceTest {
   private static UUID uuid;
+  private static MockedStatic<UUID> mockedStatic;
 
   @Mock
   private UserService userService;
@@ -72,8 +71,13 @@ public class AuthenticationServiceTest {
   @BeforeAll
   public static void setUp() {
     uuid = UUID.randomUUID();
-    mockStatic(UUID.class);
+    mockedStatic = mockStatic(UUID.class);
     when(UUID.randomUUID()).thenReturn(uuid);
+  }
+
+  @AfterAll
+  public static void tearDown() {
+    mockedStatic.close();
   }
 
   @Test

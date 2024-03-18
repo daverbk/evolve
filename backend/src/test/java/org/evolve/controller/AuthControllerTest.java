@@ -2,7 +2,7 @@ package org.evolve.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.datafaker.Faker;
-import org.evolve.config.EvolveTestConfiguration;
+import org.evolve.config.FakerConfiguration;
 import org.evolve.dto.request.SignInRequest;
 import org.evolve.dto.request.SignUpRequest;
 import org.evolve.dto.response.JwtAuthenticationResponse;
@@ -25,8 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Import(EvolveTestConfiguration.class)
-public class AuthControllerTest {
+@Import(FakerConfiguration.class)
+class AuthControllerTest {
   @MockBean
   private AuthenticationService authenticationService;
 
