@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/friendships/")
+@RequestMapping("/friendships")
 @Tag(name = "Friendships")
 public class FriendshipController {
   private final FriendshipService friendshipService;
