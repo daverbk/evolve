@@ -30,7 +30,7 @@ public class UserService {
   }
 
   @Transactional
-  public void create(User user) {
+  public User create(User user) {
     if (repository.existsByUsername(user.getUsername())) {
       throw new UserAlreadyExistsException(user.getUsername(), "User with this username already exists");
     }
@@ -39,17 +39,19 @@ public class UserService {
       throw new UserAlreadyExistsException(user.getEmail(), "User with this email already exists");
     }
 
-    save(user);
+    return save(user);
   }
 
   @Transactional
-  public void save(User user) {
-    repository.save(user);
+  public User save(User user) {
+    return repository.save(user);
   }
 
   @Transactional
   public boolean verify(String verificationCode) {
-    User user = repository.findByVerificationCode(verificationCode).orElseThrow();
+    User user = repository.findByVerificationCode(verificationCode)
+      .orElseThrow(() -> new UsernameNotFoundException(
+        "User with this verification code is not found"));
 
     if (user.isEnabled()) {
       return false;
