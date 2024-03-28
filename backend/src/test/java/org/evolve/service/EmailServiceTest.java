@@ -17,6 +17,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -38,7 +39,11 @@ public class EmailServiceTest {
 
   @Test
   public void givenCorrectContent_whenSendVerificationEmail_thenNoException()
-    throws MessagingException, IOException {
+    throws MessagingException, IOException, IllegalAccessException, NoSuchFieldException {
+
+    Field evolveMailboxField = EmailService.class.getDeclaredField("evolveMailbox");
+    evolveMailboxField.setAccessible(true);
+    evolveMailboxField.set(emailService, "dummy@dummy.com");
 
     User user = new User();
     user.setEmail(faker.internet().emailAddress());
