@@ -4,9 +4,9 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.evolve.entity.User;
-import org.evolve.util.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -23,6 +23,12 @@ public class EmailService {
   private final JavaMailSender emailSender;
   private final ResourceLoader resourceLoader;
 
+  @Value("${app.url}")
+  private String appUrl;
+
+  @Value("${spring.mail.username}")
+  private String evolveMailbox;
+
   @Autowired
   public EmailService(@Qualifier("getMailSender") JavaMailSender emailSender,
                       ResourceLoader resourceLoader) {
@@ -34,13 +40,13 @@ public class EmailService {
     throws MessagingException, IOException {
 
     String verificationLink =
-      AppConstants.APP_URL + "/auth/verify?code=" + user.getVerificationCode();
+      appUrl + "/auth/verify?code=" + user.getVerificationCode();
 
     String content = loadEmailTemplate(user.getUsername(), verificationLink);
     MimeMessage message = emailSender.createMimeMessage();
     MimeMessageHelper helper = new MimeMessageHelper(message);
 
-    helper.setFrom(AppConstants.EVOLVE_MAILBOX);
+    helper.setFrom(evolveMailbox);
     helper.setTo(user.getEmail());
     helper.setSubject("Evolve: Email verification");
     helper.setText(content, true);
