@@ -69,7 +69,7 @@ public class RefreshTokenServiceTest {
     String email = faker.internet().emailAddress();
     String password = faker.internet().password();
     User user = new User(faker.random().nextLong(), username, email, password,
-      true, Role.ROLE_USER, uuid.toString());
+      true, Role.ROLE_USER, uuid.toString(), null);
 
     when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
     when(refreshTokenRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
