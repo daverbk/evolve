@@ -29,6 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
@@ -86,7 +87,7 @@ class AuthenticationServiceTest {
     String email = faker.internet().emailAddress();
     String password = faker.internet().password();
     User user = new User(faker.random().nextLong(), username, email, password,
-      false, Role.ROLE_USER, uuid.toString());
+      false, Role.ROLE_USER, uuid.toString(), new ArrayList<>());
 
     SignUpRequest request = new SignUpRequest(username, email, password);
 
@@ -126,7 +127,7 @@ class AuthenticationServiceTest {
     String jwt = faker.letterify("????????????????????????????????????????????????0.7");
 
     User user = new User(faker.random().nextLong(), username, email, password,
-      true, Role.ROLE_USER, uuid.toString());
+      true, Role.ROLE_USER, uuid.toString(), new ArrayList<>());
 
     RefreshToken refreshToken = new RefreshToken(faker.random().nextLong(),
       uuid.toString(), Instant.now().plus(Duration.ofHours(2)), user);
@@ -159,7 +160,7 @@ class AuthenticationServiceTest {
     String refresh = uuid.toString();
 
     User user = new User(faker.random().nextLong(), username, email, password,
-      true, Role.ROLE_USER, uuid.toString());
+      true, Role.ROLE_USER, uuid.toString(), new ArrayList<>());
 
     RefreshToken refreshToken = new RefreshToken(faker.random().nextLong(), refresh,
       Instant.now().plus(Duration.ofHours(2)), user);

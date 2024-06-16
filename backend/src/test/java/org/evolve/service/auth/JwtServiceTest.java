@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import static org.mockito.Mockito.*;
@@ -48,7 +49,7 @@ class JwtServiceTest {
     String password = faker.internet().password();
     String jwt = faker.letterify("????????????????????????????????????????????????0.7");
     User user = new User(faker.random().nextLong(), username, email, password,
-      true, Role.ROLE_USER, uuid.toString());
+      true, Role.ROLE_USER, uuid.toString(), new ArrayList<>());
 
     when(jwtService.generateToken(user)).thenReturn(jwt);
     jwtService.generateToken(user);
@@ -62,7 +63,7 @@ class JwtServiceTest {
     String password = faker.internet().password();
     String jwt = faker.letterify("????????????????????????????????????????????????0.7");
     User user = new User(faker.random().nextLong(), username, email, password,
-      true, Role.ROLE_USER, uuid.toString());
+      true, Role.ROLE_USER, uuid.toString(), new ArrayList<>());
 
     when(jwtService.isTokenValid(jwt, user)).thenReturn(true);
     jwtService.isTokenValid(jwt, user);
